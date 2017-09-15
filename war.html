@@ -81,14 +81,12 @@ function oneStage(){ // 1 stage
 }
 
 function secondPhase(){  //2 stage
-
-    console.log(arrbot);
+  console.log(arrbot);
   for (var i=0;i<FIELD;i++){      // div field bot
     var divOponent =document.createElement("div");
     divOponent.className="row";
     var wrap =document.getElementById("koly");
     wrap.parentNode.appendChild(divOponent);
-    
     for (var a=0;a<FIELD;a++){
       var divOponent =document.createElement("div");
       divOponent.className="celbot";
@@ -106,10 +104,11 @@ function secondPhase(){  //2 stage
                 checkWinner(playerScore,PLAYER_WIN);
                 return shotplayer;
               }
-              else 
+              else{ 
               console.log("мимо!!!");
               idb.innerHTML=MISS;
               botshot();
+              }  
             }
           }
         }
@@ -148,18 +147,18 @@ function botshot(){   //bot shot random
       }
     }
 }      
-  function shipBotPosition(){ //random ship bot
-    for(;shipsBot>0;) {   
-      xbot= Math.floor(Math.random() *FIELD);
-      ybot= Math.floor(Math.random() *FIELD);
-      if(arrbot[xbot][ybot]==undefined){
-        arrbot[xbot][ybot]=BOT_SHIP;
-        shipsBot--;
-      }
+function shipBotPosition(){ //random ship bot
+  for(;shipsBot>0;) {   
+    xbot= Math.floor(Math.random() *FIELD);
+    ybot= Math.floor(Math.random() *FIELD);
+    if(arrbot[xbot][ybot]==undefined){
+      arrbot[xbot][ybot]=BOT_SHIP;
+      shipsBot--;
     }
-    secondPhase();
-    console.log("стреляй по врагу");  
   }
+  secondPhase();
+  console.log("стреляй по врагу");  
+}
 </script>
 </body>
 </html>
