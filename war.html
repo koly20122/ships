@@ -1,0 +1,165 @@
+﻿<html>
+<head>
+<title>
+  MОРСКОЙ БОЙ
+</title>
+<style>
+  body{background:#ff99ff;}
+  div{background:#ffcc66;height:50px;width:50px;border:2px solid black;float:left}
+  #koly{height:0;width:0;border:0px solid black;float:left}
+  .cel{margin: 0.1em 0.1em 0.1em 0.1em; text-align:center;line-height:1em;font-size:1em;cursor: pointer;}
+  .row {clear:left;height:0;width:0;border:0px solid black;float:right}
+  .celbot{background:red;margin: 0.1em 0.1em 0.1em 0.1em; text-align:center;line-height:1em;font-size:1em;cursor: pointer;} 
+</style>
+</head>
+<body>
+  <div id="koly">
+  </div>
+  <script>
+const PLAYER_WIN="игрок";
+const BOT_WIN="бот";
+const FIELD =10;
+const MISS ="miss";
+const GOOD_SHOT ="booom";
+const PLAYER_SHIP="myship";
+const BOT_SHIP="botship";
+const SHIPS=20;//check win
+var shipsPlayer=20;
+var shipsBot=20;
+var playerScore=0;
+var botScore=0;
+ 
+var arr = new Array(FIELD);//arrPlayer
+for (var i = 0; i < FIELD; i++) {
+    arr[i] = new Array(FIELD);
+}
+    console.log(arr);
+var arrbot = new Array(FIELD);//arrBot
+for (var i = 0; i < FIELD; i++) {
+    arrbot[i] = new Array(FIELD);
+  }
+const NUM="num";
+const NUMBOT="numbot";
+function divFieldPlayer(){
+for (var i=0;i<FIELD;i++){      // div field Player
+    var divPlayer =document.createElement("div");
+    divPlayer.className="row";
+    var wrap =document.getElementById("koly");
+    wrap.parentNode.appendChild(divPlayer);
+    
+    for (var a=0;a<FIELD;a++){
+      var divPlayer =document.createElement("div");
+      divPlayer.className="cel";
+      divPlayer.id=NUM+i+a;  
+      divPlayer.onclick=function click(){
+        for(var a=0;a<FIELD;a++){   //click player
+          for (var i=0;i<FIELD;i++) {
+            if ( event.target.id==NUM+i+a){ 
+              if (shipsPlayer<=0){
+              console.log("Враг ставит кораблики...");
+              shipBotPosition();//function shot
+              }
+              else{
+              event.target.innerHTML=PLAYER_SHIP;
+              arr[i][a]=PLAYER_SHIP;
+              shipsPlayer--;
+              console.log("осталось палуб: "+shipsPlayer);
+              }
+            }  
+          }
+        }
+      }    
+      var wrap =document.getElementById("koly");
+      wrap.parentNode.appendChild(divPlayer);
+    }
+  }
+}
+  oneStage();
+function oneStage(){ // 1 stage 
+  console.log("расставьте " + shipsPlayer+ " палуб корабликов и кликните по полю при готовности"); 
+  divFieldPlayer();
+}
+
+function secondPhase(){  //2 stage
+
+    console.log(arrbot);
+  for (var i=0;i<FIELD;i++){      // div field bot
+    var divOponent =document.createElement("div");
+    divOponent.className="row";
+    var wrap =document.getElementById("koly");
+    wrap.parentNode.appendChild(divOponent);
+    
+    for (var a=0;a<FIELD;a++){
+      var divOponent =document.createElement("div");
+      divOponent.className="celbot";
+      divOponent.id=NUMBOT+i+a;  
+      divOponent.onclick=function shotplayer(){
+        for(var a=0;a<FIELD;a++){   //shot player
+          for (var i=0;i<FIELD;i++) {
+            if ( event.target.id==NUMBOT+i+a){
+              var idb=document.getElementById(NUMBOT+i+a);            
+              if(arrbot[i][a]==BOT_SHIP){
+                idb.innerHTML=GOOD_SHOT;
+                console.log("попал!!! стреляй еще");
+                playerScore++;
+                console.log(playerScore);
+                checkWinner(playerScore,PLAYER_WIN);
+                return shotplayer;
+              }
+              else 
+              console.log("мимо!!!");
+              idb.innerHTML=MISS;
+              botshot();
+            }
+          }
+        }
+      }    
+      var wrap =document.getElementById("koly");
+      wrap.parentNode.appendChild(divOponent);
+    }
+  }
+}
+function checkWinner(a,b){
+ if(a==SHIPS){
+  alert("победил "+b);
+  location.reload();
+ }
+}
+var xbot;
+var ybot;
+function botshot(){   //bot shot random
+  while(true) {   
+    xbot= Math.floor(Math.random() *FIELD);
+    ybot= Math.floor(Math.random() *FIELD);
+    var ida=document.getElementById(NUM+xbot+ybot);
+      if(arr[xbot][ybot]==PLAYER_SHIP){
+        arr[xbot][ybot]=GOOD_SHOT;
+        ida.innerHTML=GOOD_SHOT;
+        console.log("--бот попал!!!");
+        botScore++;
+        checkWinner(botScore,BOT_WIN);
+        return botshot();
+      }
+      else {
+        arr[xbot][ybot]=MISS;
+        console.log("--бот промазал");
+        ida.innerHTML=MISS;
+        break;
+      }
+    }
+}      
+  function shipBotPosition(){ //random ship bot
+    for(;shipsBot>0;) {   
+      xbot= Math.floor(Math.random() *FIELD);
+      ybot= Math.floor(Math.random() *FIELD);
+      if(arrbot[xbot][ybot]==undefined){
+        arrbot[xbot][ybot]=BOT_SHIP;
+        shipsBot--;
+      }
+    }
+    secondPhase();
+    console.log("стреляй по врагу");  
+  }
+</script>
+</body>
+</html>
